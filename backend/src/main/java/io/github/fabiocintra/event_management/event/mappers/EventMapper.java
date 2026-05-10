@@ -27,6 +27,9 @@ public class EventMapper {
         event.setStartsAt(eventRequest.startsAt());
         event.setEndsAt(eventRequest.endsAt());
         event.setLocation(location);
+        if(eventRequest.status() != null){
+            event.setStatus(eventRequest.status());
+        }
         event.setOrganizerId(organizer);
 
         return event;
@@ -43,6 +46,7 @@ public class EventMapper {
                 event.getLocation(),
                 event.getCreatedAt(),
                 organizer.getId(),
+                event.getStatus(),
                 organizer.getName()
         );
     }

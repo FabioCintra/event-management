@@ -21,11 +21,17 @@ public class EventValidate {
         User organizer = event.getOrganizerId();
         String title = event.getTitle();
 
+
         if(!existsOrganizer(organizer.getId())){
             throw new NotFoundException("Organizer not found!");
         }
 
-        if(eventRepository.existsByOrganizerIdAndTitle(organizer, title)){
+        //checa por precaucao se o organizador foi passado o do evento mesmo!
+        if(event.getId() != null && !isOrganizer(organizer,event.getId())){
+            throw new EventRegisteredException("This not organizer thats event!");
+        }
+
+        if(eventRepository.existsByOrganizerIdAndTitle(organizer, title) && !isSameProject(event)){
             throw new EventRegisteredException("There is already an event with this title by this organizer!");
         }
 
@@ -35,6 +41,16 @@ public class EventValidate {
     private Boolean existsOrganizer(String organizerId){
         Optional<User> organizer = userRepository.findById(organizerId);
         return organizer.isPresent();
+    }
+
+    private Boolean isOrganizer(User organizer, String eventId){
+        Event event = eventRepository.findById(eventId).get();
+        return organizer.getId().equals(event.getOrganizerId().getId());
+    }
+
+    private Boolean isSameProject(Event event){
+        String idEventFinded = eventRepository.findByOrganizerIdAndTitle(event.getOrganizerId(), event.getTitle()).getId();
+        return event.getId().equals(idEventFinded);
     }
 
 }

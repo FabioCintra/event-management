@@ -2,6 +2,7 @@ package io.github.fabiocintra.event_management.event;
 
 import io.github.fabiocintra.event_management.event.model.Event;
 import io.github.fabiocintra.event_management.event.model.Status;
+import io.github.fabiocintra.event_management.utils.exceptions.MethodErrorException;
 import io.github.fabiocintra.event_management.utils.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -72,6 +73,22 @@ public class EventService {
 
         return eventRepository.findAll(eventSpecification, pageRequest);
 
+    }
+
+    public void updateEvent(Event event){
+        if(event.getId() == null){
+            throw new MethodErrorException("Cannot update an event,that is not registered!");
+        }
+        eventValidate.eventIsValid(event);
+        eventRepository.save(event);
+    }
+
+    public void deleteEvent(String id){
+        Optional<Event> eventOptional = eventRepository.findById(id);
+        if(eventOptional.isEmpty()){
+            throw new NotFoundException("Event not found!");
+        }
+        eventRepository.delete(eventOptional.get());
     }
 
 }

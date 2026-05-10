@@ -63,4 +63,18 @@ public class EventController {
         return  eventResponsesPage;
     }
 
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateEvent(@RequestBody @Valid EventRequest request, @PathVariable("id") String id){
+        Event event = eventMapper.toEntity(request);
+        event.setId(id);
+        eventService.updateEvent(event);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEvent(@PathVariable("id") String id){
+        eventService.deleteEvent(id);
+    }
+
 }

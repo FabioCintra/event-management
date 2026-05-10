@@ -1,6 +1,7 @@
 package io.github.fabiocintra.event_management.event.model.dto.event;
 
 import io.github.fabiocintra.event_management.event.model.Location;
+import io.github.fabiocintra.event_management.event.model.Status;
 import io.github.fabiocintra.event_management.event.model.dto.location.LocationRequest;
 
 import java.time.Instant;
@@ -15,6 +16,7 @@ public record EventResponse(
         Location location,
         Instant createdAt,
         String organizerId,
+        Status status,
         String organizerName
 ) {
 }

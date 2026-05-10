@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface EventRepository extends JpaRepository<Event, String>, JpaSpecificationExecutor<Event> {
 
     Boolean existsByOrganizerIdAndTitle(User organazerId, String title);
-
+    Event findByOrganizerIdAndTitle(User organizerId, String title);
 }
