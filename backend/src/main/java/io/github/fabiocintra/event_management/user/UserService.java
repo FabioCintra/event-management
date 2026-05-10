@@ -1,6 +1,7 @@
 package io.github.fabiocintra.event_management.user;
 
 import io.github.fabiocintra.event_management.user.model.User;
+import io.github.fabiocintra.event_management.utils.exceptions.MethodErrorException;
 import io.github.fabiocintra.event_management.utils.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,4 +30,15 @@ public class UserService {
         return userOptional.get();
     }
 
+    public void updateUser(User user) {
+        if(user.getId() == null){
+            throw new MethodErrorException("Cannot update an user,that is not registered!");
+        }
+        userValidate.userIsValid(user);
+        User userUpdated = userRepository.findById(user.getId()).get();
+        userUpdated.setName(user.getName());
+        userUpdated.setRole(user.getRole());
+        userUpdated.setEmail(user.getEmail());
+        userRepository.save(userUpdated);
+    }
 }

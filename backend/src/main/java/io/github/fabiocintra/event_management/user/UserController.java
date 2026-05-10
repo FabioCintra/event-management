@@ -1,7 +1,8 @@
 package io.github.fabiocintra.event_management.user;
 
 import io.github.fabiocintra.event_management.user.model.User;
-import io.github.fabiocintra.event_management.user.model.dto.UserRequest;
+import io.github.fabiocintra.event_management.user.model.dto.CreateUserRequest;
+import io.github.fabiocintra.event_management.user.model.dto.UpdateUserRequest;
 import io.github.fabiocintra.event_management.user.model.dto.UserResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,8 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createUser(@RequestBody @Valid UserRequest request){
-        User user = userMapper.toEntity(request);
+    public void createUser(@RequestBody @Valid CreateUserRequest request){
+        User user = userMapper.createToEntity(request);
         userService.createUser(user);
     }
 
@@ -28,6 +29,14 @@ public class UserController {
     public UserResponse getUser(@PathVariable("id") String id){
         User userFinded = userService.findById(id);
         return userMapper.toResponse(userFinded);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateUser(@PathVariable("id") String id, @RequestBody @Valid UpdateUserRequest request){
+        User user = userMapper.updateToEntity(request);
+        user.setId(id);
+        userService.updateUser(user);
     }
 
 }

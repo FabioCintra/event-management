@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 
 import java.util.Set;
 
-public record UserRequest(
+public record CreateUserRequest(
         @NotBlank(message = "Campo obrigatorio!")
         @Size(min=3, max=300, message = "Deve conter entre 3 a 300 caracteres!")
         String name,
