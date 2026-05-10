@@ -1,4 +1,4 @@
-package io.github.fabiocintra.event_management.utils.exception;
+package io.github.fabiocintra.event_management.utils.exceptions.message;
 
 public record FieldError (
         String fieldName,

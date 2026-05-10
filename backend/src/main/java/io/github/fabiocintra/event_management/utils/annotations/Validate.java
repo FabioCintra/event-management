@@ -1,4 +1,4 @@
-package io.github.fabiocintra.event_management.utils;
+package io.github.fabiocintra.event_management.utils.annotations;
 
 import org.springframework.stereotype.Component;
 

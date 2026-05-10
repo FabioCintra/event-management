@@ -1,4 +1,4 @@
-package io.github.fabiocintra.event_management.user.exceptions;
+package io.github.fabiocintra.event_management.utils.exceptions;
 
 public class EmailRegisteredException extends RuntimeException {
     public EmailRegisteredException(String message) {

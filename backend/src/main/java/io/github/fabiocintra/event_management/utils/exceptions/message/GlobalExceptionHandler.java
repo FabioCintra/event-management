@@ -1,8 +1,10 @@
-package io.github.fabiocintra.event_management.utils.exception;
+package io.github.fabiocintra.event_management.utils.exceptions.message;
 
-import io.github.fabiocintra.event_management.user.exceptions.EmailRegisteredException;
+import io.github.fabiocintra.event_management.utils.exceptions.EmailRegisteredException;
+import io.github.fabiocintra.event_management.utils.exceptions.EventRegisteredException;
+import io.github.fabiocintra.event_management.utils.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -35,6 +37,36 @@ public class GlobalExceptionHandler {
         return new CustomErrorMessage(
                 HttpStatus.CONFLICT.value(),
                 e.getMessage(),
+                List.of()
+        );
+    }
+
+    @ExceptionHandler(EventRegisteredException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public CustomErrorMessage handleEventRegisteredException(EventRegisteredException e){
+        return new CustomErrorMessage(
+                HttpStatus.CONFLICT.value(),
+                e.getMessage(),
+                List.of()
+        );
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public CustomErrorMessage handleNotFoundException(NotFoundException e) {
+        return new CustomErrorMessage(
+                HttpStatus.NOT_FOUND.value(),
+                e.getMessage(),
+                List.of()
+        );
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public CustomErrorMessage handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+        return new CustomErrorMessage(
+                HttpStatus.BAD_REQUEST.value(),
+                "Request data has an invalid format!",
                 List.of()
         );
     }
