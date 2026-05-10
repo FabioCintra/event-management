@@ -3,7 +3,7 @@ package io.github.fabiocintra.event_management.user;
 import io.github.fabiocintra.event_management.user.model.User;
 import io.github.fabiocintra.event_management.user.model.dto.UserRequest;
 import io.github.fabiocintra.event_management.user.model.dto.UserResponse;
-import io.github.fabiocintra.event_management.utils.Mapper;
+import io.github.fabiocintra.event_management.utils.annotations.Mapper;
 
 @Mapper
 public class UserMapper {

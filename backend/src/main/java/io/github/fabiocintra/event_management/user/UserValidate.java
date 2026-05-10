@@ -1,8 +1,8 @@
 package io.github.fabiocintra.event_management.user;
 
-import io.github.fabiocintra.event_management.user.exceptions.EmailRegisteredException;
+import io.github.fabiocintra.event_management.utils.exceptions.EmailRegisteredException;
 import io.github.fabiocintra.event_management.user.model.User;
-import io.github.fabiocintra.event_management.utils.Validate;
+import io.github.fabiocintra.event_management.utils.annotations.Validate;
 import lombok.RequiredArgsConstructor;
 
 @Validate

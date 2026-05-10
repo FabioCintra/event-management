@@ -1,8 +1,12 @@
 package io.github.fabiocintra.event_management.user;
 
 import io.github.fabiocintra.event_management.user.model.User;
+import io.github.fabiocintra.event_management.utils.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +19,14 @@ public class UserService {
         userValidate.userIsValid(user);
         //criptografar a senha
         userRepository.save(user);
+    }
+
+    public User findById(String id){
+        Optional<User> userOptional = userRepository.findById(id);
+        if(userOptional.isEmpty()){
+            throw new NotFoundException("User not found!");
+        }
+        return userOptional.get();
     }
 
 }
