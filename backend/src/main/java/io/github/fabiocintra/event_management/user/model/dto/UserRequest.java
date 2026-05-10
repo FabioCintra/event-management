@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.Set;
+
 public record UserRequest(
         @NotBlank(message = "Campo obrigatorio!")
         @Size(min=3, max=300, message = "Deve conter entre 3 a 300 caracteres!")
@@ -17,6 +19,6 @@ public record UserRequest(
         @Size(min=8, max=300, message = "Deve conter entre 8 a 300 caracteres!")
         String passwordHash,
         @NotNull(message = "Campo obrigatorio!")
-        Role role
+        Set<Role> role
 ) {
 }

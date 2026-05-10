@@ -5,6 +5,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
 import java.time.Instant;
+import java.util.Set;
 
 public record UserResponse(
         String id,
@@ -12,6 +13,6 @@ public record UserResponse(
         String email,
         Instant createdAt,
         @Enumerated(EnumType.STRING)
-        Role role
+        Set<Role> role
 ) {
 }

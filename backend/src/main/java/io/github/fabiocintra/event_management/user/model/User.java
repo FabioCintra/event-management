@@ -11,7 +11,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -39,9 +41,14 @@ public class User {
     @CreationTimestamp
     private Instant createdAt;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "enum_tb",
+            joinColumns = @JoinColumn(name = "user_id")
+    )
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Set<Role> role = new HashSet<>(Set.of(Role.ATTENDEE));
 
     @OneToMany(mappedBy = "organizerId")
     private List<Event> events;
