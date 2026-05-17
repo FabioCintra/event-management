@@ -1,6 +1,7 @@
 package io.github.fabiocintra.event_management.user.model;
 
 import io.github.fabiocintra.event_management.event.model.Event;
+import io.github.fabiocintra.event_management.order.model.Order;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -52,4 +53,7 @@ public class User {
 
     @OneToMany(mappedBy = "organizerId")
     private List<Event> events;
+
+    @OneToMany(mappedBy = "attendee")
+    private List<Order> orders;
 }
