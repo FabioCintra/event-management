@@ -1,9 +1,6 @@
 package io.github.fabiocintra.event_management.utils.exceptions.message;
 
-import io.github.fabiocintra.event_management.utils.exceptions.EmailRegisteredException;
-import io.github.fabiocintra.event_management.utils.exceptions.EventRegisteredException;
-import io.github.fabiocintra.event_management.utils.exceptions.MethodErrorException;
-import io.github.fabiocintra.event_management.utils.exceptions.NotFoundException;
+import io.github.fabiocintra.event_management.utils.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -77,9 +74,19 @@ public class GlobalExceptionHandler {
     public CustomErrorMessage handleMethodErrorException(MethodErrorException e) {
         return new CustomErrorMessage(
                 HttpStatus.BAD_REQUEST.value(),
-                "Request data has an invalid format!",
+                e.getMessage(),
                 List.of()
         );
     }
 
+
+    @ExceptionHandler(TicketCannotRegisteredException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public CustomErrorMessage handleTicketCannotRegisteredException(TicketCannotRegisteredException e) {
+        return new CustomErrorMessage(
+                HttpStatus.BAD_REQUEST.value(),
+                e.getMessage(),
+                List.of()
+        );
+    }
 }

@@ -1,11 +1,16 @@
 package io.github.fabiocintra.event_management.user;
 
+import io.github.fabiocintra.event_management.event.EventService;
+import io.github.fabiocintra.event_management.event.model.Event;
+import io.github.fabiocintra.event_management.order.OrderService;
+import io.github.fabiocintra.event_management.order.model.Order;
 import io.github.fabiocintra.event_management.user.model.User;
 import io.github.fabiocintra.event_management.utils.exceptions.MethodErrorException;
 import io.github.fabiocintra.event_management.utils.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,6 +20,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserValidate userValidate;
+    private final EventService eventService;
+    private final OrderService orderService;
 
     public void createUser(User user) {
         userValidate.userIsValid(user);
@@ -27,7 +34,17 @@ public class UserService {
         if(userOptional.isEmpty()){
             throw new NotFoundException("User not found!");
         }
-        return userOptional.get();
+        User user = userOptional.get();
+
+        //buscar seus eventos
+        List<Event> events = eventService.findAllEventByOrganizer(user);
+        user.setEvents(events);
+
+        //buscando orders
+        List<Order> orders = orderService.findOrderAllByAttendee(user);
+        user.setOrders(orders);
+
+        return user;
     }
 
     public void updateUser(User user) {
