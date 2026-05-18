@@ -2,6 +2,9 @@ package io.github.fabiocintra.event_management.event;
 
 import io.github.fabiocintra.event_management.event.model.Event;
 import io.github.fabiocintra.event_management.event.model.Status;
+import io.github.fabiocintra.event_management.ticket_type.TicketTypeService;
+import io.github.fabiocintra.event_management.ticket_type.model.TicketType;
+import io.github.fabiocintra.event_management.user.model.User;
 import io.github.fabiocintra.event_management.utils.exceptions.MethodErrorException;
 import io.github.fabiocintra.event_management.utils.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +15,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static io.github.fabiocintra.event_management.event.EventSpec.*;
@@ -22,6 +26,7 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final EventValidate eventValidate;
+    private final TicketTypeService ticketTypeService;
 
     public void createEvent(Event event) {
         eventValidate.eventIsValid(event);
@@ -33,7 +38,17 @@ public class EventService {
         if(eventOptional.isEmpty()){
             throw new NotFoundException("Event not found!");
         }
-        return eventOptional.get();
+        Event event = eventOptional.get();
+
+        //trazendo seu ticket_type
+        TicketType tTypeByEvent = ticketTypeService.findTicketTypesByEventId(event);
+        event.setTicketTypes(List.of(tTypeByEvent));
+
+        return event;
+    }
+
+    public List<Event> findAllEventByOrganizer(User organizer){
+        return  eventRepository.findAllByOrganizerId(organizer);
     }
 
     public Page<Event> customSearchEvents(

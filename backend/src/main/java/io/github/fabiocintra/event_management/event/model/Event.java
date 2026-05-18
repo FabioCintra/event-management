@@ -1,5 +1,6 @@
 package io.github.fabiocintra.event_management.event.model;
 
+import io.github.fabiocintra.event_management.ticket_type.model.TicketType;
 import io.github.fabiocintra.event_management.user.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "event_tb")
@@ -51,5 +53,8 @@ public class Event {
     @ManyToOne
     @JoinColumn(name="organizer_id")
     private User organizerId;
+
+    @OneToMany(mappedBy = "event")
+    private List<TicketType>  ticketTypes;
 
 }
