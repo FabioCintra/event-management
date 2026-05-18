@@ -1,5 +1,6 @@
 package io.github.fabiocintra.event_management.order.model;
 
+import io.github.fabiocintra.event_management.order_item.model.OrderItem;
 import io.github.fabiocintra.event_management.user.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name="order_tb")
@@ -39,5 +41,8 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "attendee_id")
     private User attendee;
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> orderItem;
 
 }

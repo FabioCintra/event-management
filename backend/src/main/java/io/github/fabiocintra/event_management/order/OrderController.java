@@ -26,7 +26,7 @@ public class OrderController {
     }
 
     @PutMapping
-    public void orderPaiding(@RequestParam("id") String orderId){
+    public void payOrder(@RequestParam("id") String orderId){
         orderService.payOrder(orderId);
     }
 
