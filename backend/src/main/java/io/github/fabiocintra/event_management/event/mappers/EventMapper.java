@@ -5,6 +5,7 @@ import io.github.fabiocintra.event_management.event.model.Event;
 import io.github.fabiocintra.event_management.event.model.Location;
 import io.github.fabiocintra.event_management.event.model.dto.event.EventRequest;
 import io.github.fabiocintra.event_management.event.model.dto.event.EventResponse;
+import io.github.fabiocintra.event_management.ticket_type.model.TicketType;
 import io.github.fabiocintra.event_management.user.UserService;
 import io.github.fabiocintra.event_management.user.model.User;
 import io.github.fabiocintra.event_management.utils.annotations.Mapper;
@@ -47,7 +48,8 @@ public class EventMapper {
                 event.getCreatedAt(),
                 organizer.getId(),
                 event.getStatus(),
-                organizer.getName()
+                organizer.getName(),
+                event.getTicketTypes()
         );
     }
 

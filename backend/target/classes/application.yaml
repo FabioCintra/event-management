@@ -10,3 +10,9 @@ spring:
   docker:
     compose:
       enabled: false
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none # none(padrao), create-drop(cria e quando encerrar deleta)
+    properties:
+      hibernate.format_sql: true

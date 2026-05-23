@@ -15,7 +15,6 @@ public record UserResponse(
         String name,
         String email,
         Instant createdAt,
-        @Enumerated(EnumType.STRING)
         Set<Role> role,
         List<Order> orders,
         List<Event> events

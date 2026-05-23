@@ -18,26 +18,25 @@ public class OrderController {
     private final OrderMapper orderMapper;
 
     @PostMapping
-    public ResponseEntity<OrderResponse> createOrder(@RequestBody @Valid OrderRequest request){
+    public ResponseEntity<String> createOrder(@RequestBody @Valid OrderRequest request){
         Order order = orderMapper.toEntity(request);
         String orderId = orderService.createOrder(order);
-        OrderResponse orderResponse = new OrderResponse(orderId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(orderResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderId);
     }
 
-    @PutMapping
+    @PutMapping("/payment")
     public void payOrder(@RequestParam("id") String orderId){
         orderService.payOrder(orderId);
     }
 
-    @PutMapping
+    @PutMapping("/cancel")
     public void cancelOrder(@RequestParam("id") String orderId){
         orderService.cancelOrder(orderId);
     }
 
-    @PutMapping
-    public void restauredOrder(@RequestParam("id") String orderId){
-        orderService.restauredOder(orderId);
-    }
+//    @PutMapping("/restaured")
+//    public void restauredOrder(@RequestParam("id") String orderId){
+//        orderService.restauredOder(orderId);
+//    }
 
 }

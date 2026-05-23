@@ -89,4 +89,24 @@ public class GlobalExceptionHandler {
                 List.of()
         );
     }
+
+    @ExceptionHandler(OrderItemException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public CustomErrorMessage handleOrderItemException(OrderItemException e) {
+        return new CustomErrorMessage(
+                HttpStatus.BAD_REQUEST.value(),
+                e.getMessage(),
+                List.of()
+        );
+    }
+
+    @ExceptionHandler(OrderInvalidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public CustomErrorMessage handleOrderInvalidException(OrderInvalidException e) {
+        return new CustomErrorMessage(
+                HttpStatus.BAD_REQUEST.value(),
+                e.getMessage(),
+                List.of()
+        );
+    }
 }

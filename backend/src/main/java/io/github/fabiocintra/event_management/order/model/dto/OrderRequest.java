@@ -9,6 +9,6 @@ public record OrderRequest(
         @NotBlank(message = "Campo obrigatorio!")
         String attendeeId,
         @NotNull(message = "Campo obrigatorio!")
-        BigDecimal totalAmount
+        Double totalAmount
 ) {
 }

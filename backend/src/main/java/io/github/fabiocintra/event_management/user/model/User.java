@@ -1,5 +1,6 @@
 package io.github.fabiocintra.event_management.user.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.github.fabiocintra.event_management.event.model.Event;
 import io.github.fabiocintra.event_management.order.model.Order;
 import jakarta.persistence.*;
@@ -52,8 +53,10 @@ public class User {
     private Set<Role> role = new HashSet<>(Set.of(Role.ATTENDEE));
 
     @OneToMany(mappedBy = "organizerId")
+    @JsonManagedReference
     private List<Event> events;
 
     @OneToMany(mappedBy = "attendee")
+    @JsonManagedReference
     private List<Order> orders;
 }

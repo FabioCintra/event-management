@@ -2,13 +2,18 @@ package io.github.fabiocintra.event_management.order;
 
 import io.github.fabiocintra.event_management.order.model.Order;
 import io.github.fabiocintra.event_management.order.model.OrderStatus;
+import io.github.fabiocintra.event_management.order_item.OrderItemService;
+import io.github.fabiocintra.event_management.order_item.model.OrderItem;
+import io.github.fabiocintra.event_management.ticket.TicketService;
 import io.github.fabiocintra.event_management.user.UserService;
 import io.github.fabiocintra.event_management.user.model.User;
+import io.github.fabiocintra.event_management.utils.exceptions.MethodErrorException;
 import io.github.fabiocintra.event_management.utils.exceptions.NotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,13 +22,15 @@ import java.util.Optional;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final OrderItemService orderItemService;
+    private final TicketService ticketService;
 
     public String createOrder(Order order){
         orderRepository.save(order);
         return order.getId();
     }
 
-    public Order fetchOrderById(String orderId){
+    public Order findOrderById(String orderId){
         Optional<Order> orderFinded = orderRepository.findById(orderId);
         if(orderFinded.isEmpty()){
             throw new NotFoundException("Order not found!");
@@ -47,29 +54,36 @@ public class OrderService {
     }
 
     private Order fetchOrderItem(Order order){
-        // busco os items de cada ordem e seto elas na order
+        List<OrderItem> allOrderItemsByOrder = orderItemService.findAllOrderItemsByOrder(order);
+        order.setOrderItem(allOrderItemsByOrder);
         return order;
     }
 
     @Transactional
     public void payOrder(String orderId){
-        Order order = fetchOrderById(orderId);
+        Order order = findOrderById(orderId);
+        if(order.getStatus() !=  OrderStatus.PENDING){
+            throw new MethodErrorException("Order status is not PENDING!");
+        }
         order.setStatus(OrderStatus.PAID);
+        order.setPaidAt(Instant.now());
+        orderRepository.save(order);
 
-        //mudo a quantidade dos itens da order
-        //se item esgotou cancela a order
-    }
-
-    public void cancelOrder(String orderId) {
-        Order order = fetchOrderById(orderId);
-        order.setStatus(OrderStatus.CANCELLED);
+        List<OrderItem> allOrderItemsByOrder = orderItemService.findAllOrderItemsByOrder(order);
+        allOrderItemsByOrder.forEach(orderItem ->
+                ticketService.createTicket(order,orderItem.getTicketType()));
     }
 
     @Transactional
-    public void restauredOder(String orderId) {
-        Order order = fetchOrderById(orderId);
-        order.setStatus(OrderStatus.PENDING);
+    public void cancelOrder(String orderId) {
+        Order order = findOrderById(orderId);
+        if(order.getStatus() !=  OrderStatus.PENDING){
+            throw new MethodErrorException("Order status is not PENDING!");
+        }
+        order.setStatus(OrderStatus.CANCELLED);
+        orderRepository.save(order);
 
-        //restaura os itens na order
+        List<OrderItem> orderItems = order.getOrderItem();
+        orderItems.forEach(orderItemService::orderItemCanceled);
     }
 }

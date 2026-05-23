@@ -1,6 +1,9 @@
 package io.github.fabiocintra.event_management.order.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.github.fabiocintra.event_management.order_item.model.OrderItem;
+import io.github.fabiocintra.event_management.ticket.model.Ticket;
 import io.github.fabiocintra.event_management.user.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,13 +29,14 @@ public class Order {
     private String id;
 
     @Column(name="total_amount")
-    private BigDecimal totalAmount;
+    private Double totalAmount;
 
     @Column(name="status")
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
     @CreationTimestamp
-    @Column(name="created_at")
+    @Column(name="create_at")
     private Instant createdAt;
 
     @Column(name="paid_at")
@@ -40,9 +44,15 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "attendee_id")
+    @JsonBackReference
     private User attendee;
 
     @OneToMany(mappedBy = "order")
+    @JsonManagedReference
     private List<OrderItem> orderItem;
+
+    @OneToMany(mappedBy = "order")
+    @JsonManagedReference
+    private List<Ticket>  ticket;
 
 }

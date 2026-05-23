@@ -1,5 +1,7 @@
 package io.github.fabiocintra.event_management.event.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.github.fabiocintra.event_management.ticket_type.model.TicketType;
 import io.github.fabiocintra.event_management.user.model.User;
 import jakarta.persistence.*;
@@ -52,9 +54,11 @@ public class Event {
 
     @ManyToOne
     @JoinColumn(name="organizer_id")
+    @JsonBackReference
     private User organizerId;
 
     @OneToMany(mappedBy = "event")
+    @JsonManagedReference
     private List<TicketType>  ticketTypes;
 
 }

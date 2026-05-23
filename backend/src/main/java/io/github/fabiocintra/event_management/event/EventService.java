@@ -28,9 +28,11 @@ public class EventService {
     private final EventValidate eventValidate;
     private final TicketTypeService ticketTypeService;
 
-    public void createEvent(Event event) {
+    public String createEvent(Event event) {
         eventValidate.eventIsValid(event);
         eventRepository.save(event);
+
+        return event.getId();
     }
 
     public Event findEventById(String id){
@@ -42,7 +44,9 @@ public class EventService {
 
         //trazendo seu ticket_type
         TicketType tTypeByEvent = ticketTypeService.findTicketTypesByEventId(event);
-        event.setTicketTypes(List.of(tTypeByEvent));
+        if(tTypeByEvent != null){
+            event.setTicketTypes(List.of(tTypeByEvent));
+        }
 
         return event;
     }
