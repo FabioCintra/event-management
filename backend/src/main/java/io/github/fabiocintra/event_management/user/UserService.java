@@ -8,6 +8,7 @@ import io.github.fabiocintra.event_management.user.model.User;
 import io.github.fabiocintra.event_management.utils.exceptions.MethodErrorException;
 import io.github.fabiocintra.event_management.utils.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,11 +23,16 @@ public class UserService {
     private final UserValidate userValidate;
     private final EventService eventService;
     private final OrderService orderService;
+    private final PasswordEncoder passwordEncoder;
 
     public void createUser(User user) {
         userValidate.userIsValid(user);
-        //criptografar a senha
+        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
         userRepository.save(user);
+    }
+
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     public User findById(String id){

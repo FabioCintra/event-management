@@ -27,9 +27,15 @@ C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fab
 C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\order_item\OrderItemRepository.java
 C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\order_item\OrderItemService.java
 C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\order_item\OrderItemValidate.java
+C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\security\CustomAuthentication.java
+C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\security\CustomAuthenticationProvider.java
+C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\security\JwtService.java
+C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\security\SecurityApplication.java
 C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\ticket\model\Ticket.java
 C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\ticket\model\TicketStatus.java
 C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\ticket\TicketController.java
+C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\ticket\TicketRepository.java
+C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\ticket\TicketService.java
 C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\ticket_type\model\dto\TicketTypeRequest.java
 C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\ticket_type\model\TicketType.java
 C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\ticket_type\model\TicketTypeMapper.java
@@ -52,6 +58,7 @@ C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fab
 C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\utils\exceptions\CreateException.java
 C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\utils\exceptions\EmailRegisteredException.java
 C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\utils\exceptions\EventRegisteredException.java
+C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\utils\exceptions\LoginException.java
 C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\utils\exceptions\message\CustomErrorMessage.java
 C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\utils\exceptions\message\FieldError.java
 C:\Users\Fabio\Desktop\meu-projeto-fullstack\backend\src\main\java\io\github\fabiocintra\event_management\utils\exceptions\message\GlobalExceptionHandler.java
