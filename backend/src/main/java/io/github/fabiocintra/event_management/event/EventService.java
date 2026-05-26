@@ -102,12 +102,16 @@ public class EventService {
         eventRepository.save(event);
     }
 
-    public void deleteEvent(String id){
+    public void deleteEvent(String userId,String id){
         Optional<Event> eventOptional = eventRepository.findById(id);
         if(eventOptional.isEmpty()){
             throw new NotFoundException("Event not found!");
         }
-        eventRepository.delete(eventOptional.get());
+        Event event = eventOptional.get();
+        if(!event.getOrganizerId().equals(userId)) {
+            throw new MethodErrorException("Cannot delete an event,if you are not owner this!");
+        }
+        eventRepository.delete(event);
     }
 
 }

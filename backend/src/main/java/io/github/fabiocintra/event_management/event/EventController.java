@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -24,6 +25,7 @@ public class EventController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
+    @PreAuthorize("hasRole('ORGANIZER')")
     public String createdEvent(@RequestBody @Valid EventRequest request){
         Event event = eventMapper.toEntity(request);
         String eventId = eventService.createEvent(event);
@@ -68,6 +70,7 @@ public class EventController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ORGANIZER')")
     public void updateEvent(@RequestBody @Valid EventRequest request, @PathVariable("id") String id){
         Event event = eventMapper.toEntity(request);
         event.setId(id);
@@ -76,8 +79,9 @@ public class EventController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteEvent(@PathVariable("id") String id){
-        eventService.deleteEvent(id);
+    @PreAuthorize("hasRole('ORGANIZER')")
+    public void deleteEvent(@PathVariable("eventId") String id, @PathVariable("userId") String userId){
+        eventService.deleteEvent(userId,id);
     }
 
 }
