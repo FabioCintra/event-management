@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -23,6 +24,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -34,14 +36,12 @@ import java.util.UUID;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 @EnableMethodSecurity(securedEnabled = true,jsr250Enabled = true)
 public class SecurityApplication {
 
-    private final JwtService jwtService;
-
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,JwtService jwtService, FilterJWTAuthentication filter) throws Exception {
+
         return http
                 .csrf(securityCsrf -> securityCsrf.disable())
                 .httpBasic(Customizer.withDefaults())
@@ -62,8 +62,10 @@ public class SecurityApplication {
                     });
                 }) // botar minha tela de login depois
                 .authorizeHttpRequests(authRequest -> {
+                    authRequest.requestMatchers(HttpMethod.POST,"/users/**").permitAll();
                     authRequest.anyRequest().authenticated();
                 })
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(Customizer.withDefaults()) //botar depois prara mandar para a tela de login
                 .build();
     }
