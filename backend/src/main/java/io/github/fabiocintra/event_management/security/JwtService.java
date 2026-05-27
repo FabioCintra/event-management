@@ -1,5 +1,7 @@
 package io.github.fabiocintra.event_management.security;
 
+import io.github.fabiocintra.event_management.user.UserService;
+import io.github.fabiocintra.event_management.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,14 +19,18 @@ import java.time.temporal.ChronoUnit;
 public class JwtService {
 
     private final JwtEncoder jwtEncoder;
+    private final UserService userService;
 
     public String generateToken(Authentication authentication) {
+        String email = authentication.getName();
+        User user = userService.findUserByEmail(email);
+
         Instant now = Instant.now();
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("event_management_api")
                 .issuedAt(now)
                 .expiresAt(now.plus(1, ChronoUnit.HOURS))
-                .subject(authentication.getName())
+                .subject(email)
                 .claim("roles", authentication.getAuthorities())
                 .build();
 

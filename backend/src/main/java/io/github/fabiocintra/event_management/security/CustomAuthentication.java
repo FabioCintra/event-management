@@ -39,7 +39,7 @@ public class CustomAuthentication implements Authentication {
 
     @Override
     public @Nullable Object getPrincipal() {
-        return null;
+        return this.user;
     }
 
     @Override

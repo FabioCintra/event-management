@@ -52,7 +52,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<Role> role = new HashSet<>(Set.of(Role.ATTENDEE));
 
-    @OneToMany(mappedBy = "organizerId")
+    @OneToMany(mappedBy = "organizer")
     @JsonManagedReference
     private List<Event> events;
 

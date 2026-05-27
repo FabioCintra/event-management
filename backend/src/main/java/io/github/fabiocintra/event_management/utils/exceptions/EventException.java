@@ -1,7 +1,7 @@
 package io.github.fabiocintra.event_management.utils.exceptions;
 
-public class EventRegisteredException extends RuntimeException {
-    public EventRegisteredException(String message) {
+public class EventException extends RuntimeException {
+    public EventException(String message) {
         super(message);
     }
 }

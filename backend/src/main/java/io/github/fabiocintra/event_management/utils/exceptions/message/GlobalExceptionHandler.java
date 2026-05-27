@@ -39,9 +39,9 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(EventRegisteredException.class)
+    @ExceptionHandler(EventException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public CustomErrorMessage handleEventRegisteredException(EventRegisteredException e){
+    public CustomErrorMessage handleEventRegisteredException(EventException e){
         return new CustomErrorMessage(
                 HttpStatus.CONFLICT.value(),
                 e.getMessage(),
