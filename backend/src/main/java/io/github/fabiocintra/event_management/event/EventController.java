@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -26,9 +27,9 @@ public class EventController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     @PreAuthorize("hasRole('ORGANIZER')")
-    public String createdEvent(@RequestBody @Valid EventRequest request){
+    public String createdEvent(@RequestBody @Valid EventRequest request, Authentication auth) {
         Event event = eventMapper.toEntity(request);
-        String eventId = eventService.createEvent(event);
+        String eventId = eventService.createEvent(event,auth);
 
         return eventId;
     }
@@ -71,17 +72,17 @@ public class EventController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ORGANIZER')")
-    public void updateEvent(@RequestBody @Valid EventRequest request, @PathVariable("id") String id){
+    public void updateEvent(@RequestBody @Valid EventRequest request, @PathVariable("id") String id, Authentication auth) {
         Event event = eventMapper.toEntity(request);
         event.setId(id);
-        eventService.updateEvent(event);
+        eventService.updateEvent(event, auth);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ORGANIZER')")
-    public void deleteEvent(@PathVariable("eventId") String id, @PathVariable("userId") String userId){
-        eventService.deleteEvent(userId,id);
+    public void deleteEvent(@RequestParam("eventId") String id,Authentication auth){
+        eventService.deleteEvent(auth,id);
     }
 
 }

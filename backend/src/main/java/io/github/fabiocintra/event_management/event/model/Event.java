@@ -55,7 +55,7 @@ public class Event {
     @ManyToOne
     @JoinColumn(name="organizer_id")
     @JsonBackReference
-    private User organizerId;
+    private User organizer;
 
     @OneToMany(mappedBy = "event")
     @JsonManagedReference

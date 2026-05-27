@@ -31,13 +31,13 @@ public class EventMapper {
         if(eventRequest.status() != null){
             event.setStatus(eventRequest.status());
         }
-        event.setOrganizerId(organizer);
+        event.setOrganizer(organizer);
 
         return event;
     }
 
     public EventResponse toResponse(Event event) {
-        User organizer = event.getOrganizerId();
+        User organizer = event.getOrganizer();
         return new EventResponse(
                 event.getId(),
                 event.getTitle(),

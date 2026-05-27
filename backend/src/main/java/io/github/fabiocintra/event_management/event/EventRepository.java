@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface EventRepository extends JpaRepository<Event, String>, JpaSpecificationExecutor<Event> {
 
-    Boolean existsByOrganizerIdAndTitle(User organazerId, String title);
-    Event findByOrganizerIdAndTitle(User organizerId, String title);
-    List<Event> findAllByOrganizerId(User organizer);
+    Boolean existsByOrganizerAndTitle(User organazer, String title);
+    Event findByOrganizerAndTitle(User organizer, String title);
+    List<Event> findAllByOrganizer(User organizer);
 }

@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -28,8 +30,8 @@ public class EventService {
     private final EventValidate eventValidate;
     private final TicketTypeService ticketTypeService;
 
-    public String createEvent(Event event) {
-        eventValidate.eventIsValid(event);
+    public String createEvent(Event event, Authentication auth) {
+        eventValidate.eventIsValid(event,auth);
         eventRepository.save(event);
 
         return event.getId();
@@ -52,7 +54,7 @@ public class EventService {
     }
 
     public List<Event> findAllEventByOrganizer(User organizer){
-        return  eventRepository.findAllByOrganizerId(organizer);
+        return  eventRepository.findAllByOrganizer(organizer);
     }
 
     public Page<Event> customSearchEvents(
@@ -94,21 +96,23 @@ public class EventService {
 
     }
 
-    public void updateEvent(Event event){
+    public void updateEvent(Event event,Authentication auth){
         if(event.getId() == null){
             throw new MethodErrorException("Cannot update an event,that is not registered!");
         }
-        eventValidate.eventIsValid(event);
+        eventValidate.eventIsValid(event,auth);
         eventRepository.save(event);
     }
 
-    public void deleteEvent(String userId,String id){
+    public void deleteEvent(Authentication auth,String id){
         Optional<Event> eventOptional = eventRepository.findById(id);
         if(eventOptional.isEmpty()){
             throw new NotFoundException("Event not found!");
         }
+
+        User user = (User) auth.getPrincipal();
         Event event = eventOptional.get();
-        if(!event.getOrganizerId().equals(userId)) {
+        if(!event.getOrganizer().getId().equals(user.getId())) {
             throw new MethodErrorException("Cannot delete an event,if you are not owner this!");
         }
         eventRepository.delete(event);
