@@ -1,5 +1,8 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import book from "../assets/book.png";
+import { AuthContext } from "../store/authentication-context";
+import { useNavigate } from "react-router-dom";
+import BoxAlert from "../components/BoxAlert";
 
 const USERNAME_REGEX = /^[a-zA-Z0-9._-]+@gmail\.com$/
 
@@ -7,36 +10,71 @@ export default function Login(){
 
     const [usernameIsWrong, setUsernameIsWrong] = useState(false);
     const [passwordIsWrong, setPasswordIsWrong] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
+    const navigate = useNavigate();
+    
     const getPassword = useRef();
     const getUsername = useRef();
+    const authContext = useContext(AuthContext);
 
     const outlineUsername = usernameIsWrong ? "outline-red-600 outline-2" : "outline-none";
     const outlinePassword = passwordIsWrong ? "outline-red-600 outline-2" : "outline-none";
 
-    function checkInformations(event, username, password){
-        
+    function handleAlert(){
+        setShowAlert(false);
+    }
+
+    async function handleLogin(event){
+        const username = getUsername.current.value;
+        const password = getPassword.current.value;
+        event.preventDefault();
+
+        /*
+        *Checagem de credenciais!
+        */
         if(!username && !password){
-            event.preventDefault(); // impede o envio imediato
             setPasswordIsWrong(true);
             setUsernameIsWrong(true);
             return;
         }
 
         if(!username || !USERNAME_REGEX.test(username)){
-            event.preventDefault(); // impede o envio imediato
             setUsernameIsWrong(true);
             return;
         }
         if(!password || password.legth < 8){
-            event.preventDefault(); // impede o envio imediato
             setPasswordIsWrong(true);
             return;
         }
+
+        const data = new URLSearchParams();
+        data.append("username", username); 
+        data.append("password", password); 
+        const response = await fetch("http://localhost:8080/login",{
+            method:"POST",
+            credentials: 'include',
+            headers:{
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: data
+        });
         
+        
+        if(response.ok){
+            const userData = await response.json();
+            authContext.login(userData);
+            navigate("/home")
+        }
+        else{
+            getUsername.current.value = "";
+            getPassword.current.value = "";
+            setShowAlert(true);
+        }
     }
     
     return(
         <div className="min-h-screen w-full bg-[#eeeeee] flex items-center justify-center">
+            {showAlert && <BoxAlert title="ERRO!" message="Usuario ou Senha incorreto" onClose={handleAlert}/>}
             <div className="w-[345px] h-[430px] bg-white rounded-lg shadow-md flex flex-col items-center px-[26px] pt-[18px]">
                 <img src={book} className="w-[70px] h-[70px] rounded-full bg-[#d9d9d9] mb-[28px]" />
 
@@ -45,7 +83,7 @@ export default function Login(){
                     GESTOR DE EVENTOS
                 </h1>
 
-                <form action="http://localhost:8080/login" method="POST" onSubmit={(event) => checkInformations(event, getUsername.current.value, getPassword.current.value)}className="w-full mt-[40px]">
+                <form onSubmit={(event) => handleLogin(event)}className="w-full mt-[40px]">
                     <div className="flex flex-col gap-[31px]">
                         <label>
                             {usernameIsWrong && "Username invalid!"}
