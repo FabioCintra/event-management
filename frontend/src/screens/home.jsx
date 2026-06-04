@@ -1,8 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import OrderItem from "../components/OrderItem";
 import OrderItemShow from "../components/OrderItemShow";
+import { AuthContext } from "../store/authentication-context";
+import SideBar from "../components/SideBar";
+
 export default function Home(){
     const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
+    const authContext = useContext(AuthContext);
+
     return (
         <div className="min-h-screen w-full bg-[#eeeeee] relative">
             <header className="w-full h-[85px] relative flex justify-end px-10 ">
@@ -23,31 +28,8 @@ export default function Home(){
                     </button>
                 </div>
             </header>
-            <OrderItemShow />
-            {sidebarIsOpen && (
-                <div className="fixed inset-0 z-50 flex">
-                    <div
-                        onClick={() => setSidebarIsOpen(false)}
-                        className="absolute inset-0 bg-black/50"
-                    />
-
-                    <aside className="relative ml-auto w-[230px] h-full bg-white shadow-lg p-5">
-                        <button
-                            onClick={() => setSidebarIsOpen(false)}
-                            className="mb-6 text-sm font-bold text-[#8c210f]"
-                        >
-                            FECHAR
-                        </button>
-
-                        <nav className="flex flex-col gap-4 text-sm font-semibold">
-                            <button className="text-left">Perfil</button>
-                            <button className="text-left">Meus pedidos</button>
-                            <button className="text-left">Configurações</button>
-                            <button className="text-left">Sair</button>
-                        </nav>
-                    </aside>
-                </div>
-            )}
+            {<OrderItemShow />}
+            {sidebarIsOpen && <SideBar setSidebarIsOpen={setSidebarIsOpen}/>}
         </div>
     );
 }
