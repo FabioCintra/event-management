@@ -15,8 +15,6 @@ public record UserResponse(
         String name,
         String email,
         Instant createdAt,
-        Set<Role> role,
-        List<Order> orders,
-        List<Event> events
+        Set<Role> role
 ) {
 }

@@ -32,9 +32,7 @@ public class UserMapper {
                 user.getName(),
                 user.getEmail(),
                 user.getCreatedAt(),
-                user.getRole(),
-                user.getOrders(),
-                user.getEvents()
+                user.getRole()
         );
     }
 
