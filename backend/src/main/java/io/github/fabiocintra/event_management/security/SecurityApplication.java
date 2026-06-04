@@ -5,6 +5,9 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import io.github.fabiocintra.event_management.user.UserMapper;
+import io.github.fabiocintra.event_management.user.model.User;
+import io.github.fabiocintra.event_management.user.model.dto.UserResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +21,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -25,6 +29,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import tools.jackson.databind.ObjectMapper;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -40,7 +45,7 @@ import java.util.UUID;
 public class SecurityApplication {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http,JwtService jwtService, FilterJWTAuthentication filter) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtService jwtService, FilterJWTAuthentication filter, UserMapper userMapper) throws Exception {
 
         return http
                 .csrf(securityCsrf -> securityCsrf.disable())
@@ -55,16 +60,26 @@ public class SecurityApplication {
                                 .path("/")
                                 .maxAge(Duration.ofHours(1))
                                 .secure(false)
+                                .sameSite("Lax")
                                 .build();
 
+                        User user = (User) authentication.getPrincipal();
+                        UserResponse userResponse = userMapper.toResponse(user);
+
                         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+                        response.setContentType("application/json");
+                        response.getWriter().write(new ObjectMapper().writeValueAsString(userResponse));
                         response.setStatus(HttpServletResponse.SC_OK);
                     });
-                }) // botar minha tela de login depois
+                    form.failureHandler((request, response, exception) -> {
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    });
+                })
                 .authorizeHttpRequests(authRequest -> {
                     authRequest.requestMatchers(HttpMethod.POST,"/users/**").permitAll();
                     authRequest.anyRequest().authenticated();
                 })
+                .cors(Customizer.withDefaults())
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(Customizer.withDefaults()) //botar depois prara mandar para a tela de login
                 .build();

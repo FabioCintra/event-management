@@ -35,14 +35,14 @@ public class EventController {
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public EventResponse findEventById(@PathVariable("id") String id){
         Event eventFinded = eventService.findEventById(id);
         return eventMapper.toResponse(eventFinded);
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public Page<EventResponse> searchCustomEvents(
             @RequestParam(value = "title", required = false) String title,
             @RequestParam(value = "city", required = false) String city,

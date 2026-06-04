@@ -33,7 +33,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new LoginException("Invalid username or password");
         }
 
-            return new CustomAuthentication(user);
+        return new CustomAuthentication(user);
 
     }
 
