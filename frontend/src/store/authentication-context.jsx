@@ -58,7 +58,6 @@ export default function AuthContextProvider({children}){
                 }
                 else{
                     const userData = await response.json();
-                    console.log(userData);
                     handleInfos(userData);
                     navigate("/home");
                 }

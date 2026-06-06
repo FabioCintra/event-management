@@ -1,4 +1,11 @@
+import { useEffect } from "react";
+
 export default function BoxAlert({title,message,onClose}){
+
+    useEffect(() => {
+        setTimeout(() => onClose() , 5000);
+    },[])
+
     return(
         <div className="fixed top-5 right-5 w-72 bg-red-100 border-l-4 border-red-500 p-4 shadow-lg z-50">    
             <div className="flex justify-between items-start">

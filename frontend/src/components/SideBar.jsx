@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "../store/authentication-context";
-import { useNavigate } from "react-router-dom";
+import { replace, useNavigate } from "react-router-dom";
 
 export default function SideBar({setSidebarIsOpen}){
     const authContext = useContext(AuthContext);
@@ -27,7 +27,7 @@ export default function SideBar({setSidebarIsOpen}){
 
                 <nav className="flex flex-col gap-4 text-sm font-semibold">
                     <button onClick={() => navigate("/profile", {replace: true})} className="text-left">Perfil</button>
-                    <button className="text-left">Meus pedidos</button>
+                    <button onClick={() => navigate("/my-orders", {replace:true})}className="text-left">Meus pedidos</button>
                     <button className="text-left">Configurações</button>
                     <button onClick={() => authContext.logout()} className="text-left hover:text-red-400">Sair</button>
                 </nav>

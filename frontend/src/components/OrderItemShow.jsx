@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import OrderItem from "./OrderItem";
+import { AuthContext } from "../store/authentication-context";
+import ButtonOrderItem from "./ButtonOrderItem";
 
 export default function OrderItemShow(){
-
+    const authContext = useContext(AuthContext);
     const [page, setPage] = useState(0);
     const [orderItems, setOrderItems] = useState(null);
     const [items, setItems] = useState([]);
-    const [totPages, setTotPages] = useState(10);
-    const cssButtonsPage = "px-3 py-1 bg-white rounded-md shadow disabled:opacity-40";
+    const [totPages, setTotPages] = useState(0);
 
     useEffect(() => {
         async function loadOrderItems(){
@@ -16,9 +17,13 @@ export default function OrderItemShow(){
                     method:"GET",
                     credentials:"include",
                 });
+                
+                if(!response.ok){
+                    authContext.logout();
+                }
 
                 const {content,totalPages} = await response.json();
-                console.log(content);
+                
                 setItems(content);
                 setTotPages(totalPages);
             }
@@ -29,7 +34,7 @@ export default function OrderItemShow(){
         loadOrderItems();
     }, [page])
 
-    function handlePage(indexPage){
+    function handlePages(indexPage){
         if(page >= 0 && indexPage <= totPages){ // botar tambem com base na  quantia qu eeu receber do back
             setPage(indexPage);
         } 
@@ -43,15 +48,7 @@ export default function OrderItemShow(){
                     : <p>VAZIO...</p>
                 }
             </div>
-            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex gap-3">
-                <button className={cssButtonsPage} onClick={() => handlePage(page - 1)}>
-                    Anteiror
-                </button>
-                
-                <button className={cssButtonsPage} onClick={() => handlePage(page + 1)}>
-                    Proximo
-                </button>
-            </div>
+            <ButtonOrderItem page={page} handlePage={handlePages}/>
         </main> 
     );
 }
