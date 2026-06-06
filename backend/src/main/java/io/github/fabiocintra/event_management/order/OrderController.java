@@ -3,15 +3,21 @@ package io.github.fabiocintra.event_management.order;
 import io.github.fabiocintra.event_management.order.model.Order;
 import io.github.fabiocintra.event_management.order.model.dto.OrderRequest;
 import io.github.fabiocintra.event_management.order.model.dto.OrderResponse;
+import io.github.fabiocintra.event_management.user.model.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Stream;
+
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/orders")
 @RequiredArgsConstructor
 public class OrderController {
 
@@ -35,9 +41,15 @@ public class OrderController {
         orderService.cancelOrder(orderId);
     }
 
-//    @PutMapping("/restaured")
-//    public void restauredOrder(@RequestParam("id") String orderId){
-//        orderService.restauredOder(orderId);
-//    }
+    @GetMapping
+    public ResponseEntity<Page<OrderResponse>> getOrderByUserId(Authentication authentication){
+        User user = (User) authentication.getPrincipal();
+        Page<Order> orders = orderService.findOrderAllByAttendee(user);
+        Page<OrderResponse> pageOrderResponse = orders.map(orderMapper::toResponse);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(pageOrderResponse);
+    }
 
 }

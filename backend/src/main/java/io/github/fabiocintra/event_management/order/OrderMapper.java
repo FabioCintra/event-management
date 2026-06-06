@@ -3,6 +3,7 @@ package io.github.fabiocintra.event_management.order;
 import io.github.fabiocintra.event_management.order.model.Order;
 import io.github.fabiocintra.event_management.order.model.OrderStatus;
 import io.github.fabiocintra.event_management.order.model.dto.OrderRequest;
+import io.github.fabiocintra.event_management.order.model.dto.OrderResponse;
 import io.github.fabiocintra.event_management.user.UserService;
 import io.github.fabiocintra.event_management.user.model.User;
 import io.github.fabiocintra.event_management.utils.annotations.Mapper;
@@ -23,6 +24,16 @@ public class OrderMapper {
         order.setTotalAmount(orderRequest.totalAmount());
 
         return order;
+    }
+
+    public OrderResponse toResponse(Order order){
+        return new OrderResponse(
+                order.getId(),
+                order.getTotalAmount(),
+                order.getCreatedAt(),
+                order.getPaidAt(),
+                order.getStatus()
+        );
     }
 
 }

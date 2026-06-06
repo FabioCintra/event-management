@@ -42,13 +42,13 @@ public class UserService {
         }
         User user = userOptional.get();
 
-        //buscar seus eventos
-        List<Event> events = eventService.findAllEventByOrganizer(user);
-        user.setEvents(events);
-
-        //buscando orders
-        List<Order> orders = orderService.findOrderAllByAttendee(user);
-        user.setOrders(orders);
+//        //buscar seus eventos
+//        List<Event> events = eventService.findAllEventByOrganizer(user);
+//        user.setEvents(events);
+//
+//        //buscando orders
+//        List<Order> orders = orderService.findOrderAllByAttendee(user);
+//        user.setOrders(orders);
 
         return user;
     }

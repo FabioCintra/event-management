@@ -11,6 +11,10 @@ import io.github.fabiocintra.event_management.utils.exceptions.MethodErrorExcept
 import io.github.fabiocintra.event_management.utils.exceptions.NotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -40,17 +44,13 @@ public class OrderService {
         return fetchOrderItem(order);
     }
 
-    public List<Order> findOrderAllByAttendee(User  attendee){
-        List<Order> orders = orderRepository.findByAttendee(attendee);
-
-        if(orders.isEmpty()){
-            return orders;
-        }
-
-        return orders
-                .stream()
-                .map(order -> fetchOrderItem(order))
-                .toList();
+    public Page<Order> findOrderAllByAttendee(User  attendee){
+        Specification<Order> specification = Specification.where(
+                (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("attendee"), attendee)
+        );
+        Pageable  pageable = PageRequest.of(0, 10);
+        Page<Order> orders = orderRepository.findAll(specification, pageable);
+        return orders;
     }
 
     private Order fetchOrderItem(Order order){
